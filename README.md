@@ -52,14 +52,35 @@ python main.py video.mp4
 
 ## 项目结构
 
-| 文件 | 说明 |
-|------|------|
-| `interfaces.py` | 抽象基类与数据类定义 |
-| `config.py` | 所有可调参数 |
-| `mediapipe_detector.py` | MediaPipe FaceLandmarker 实现 |
-| `procrustes_headpose.py` | 公制头部姿态估计（简化版） |
-| `spherical_eye_tracker.py` | 球形眼球模型视线追踪 |
-| `geometric_ptosis.py` | PFH/IPD 几何计算 |
-| `simple_personalizer.py` | 9 点校准优化 |
-| `berke_muscle_tester.py` | 提上睑肌肌力测试（Berke 法） |
-| `main.py` | 主程序入口 |
+```
+MediapipeDemo/
+│
+├── main.py                   # 主程序入口（视频循环、键盘交互、模式调度）
+├── interfaces.py             # 抽象基类与数据类（FaceDetector、HeadPoseMetricEstimator 等）
+├── config.py                 # 集中管理所有可调参数（关键点索引、阈值、颜色等）
+│
+├── mediapipe_detector.py     # FaceDetector 实现：MediaPipe FaceLandmarker（478 点含虹膜）
+├── procrustes_headpose.py    # HeadPoseMetricEstimator 实现：虹膜尺度先验，输出 mm 级网格
+├── spherical_eye_tracker.py  # EyeTracker 实现：球形眼球模型，输出 yaw/pitch (deg)
+├── geometric_ptosis.py       # PtosisMetricCalculator 实现：3D 欧氏距离计算 PFH/IPD (mm)
+├── simple_personalizer.py    # Personalizer 实现：9 点校准 + scipy 最小二乘优化
+├── berke_muscle_tester.py    # MuscleStrengthTester 实现：Berke 法肌力测量 + 状态机
+│
+├── face_landmarker.task      # MediaPipe FaceLandmarker 模型文件
+├── requirements.txt          # Python 依赖列表
+└── README.md                 # 本文档
+```
+
+### 模块依赖关系
+
+```
+main.py
+  ├── mediapipe_detector.py  →  interfaces.FaceDetector
+  ├── procrustes_headpose.py →  interfaces.HeadPoseMetricEstimator
+  ├── spherical_eye_tracker.py → interfaces.EyeTracker
+  ├── geometric_ptosis.py    →  interfaces.PtosisMetricCalculator
+  ├── simple_personalizer.py →  interfaces.Personalizer
+  └── berke_muscle_tester.py →  interfaces.MuscleStrengthTester
+          ↑
+     所有模块均读取 config.py 中的配置参数
+```
