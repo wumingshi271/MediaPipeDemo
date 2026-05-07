@@ -58,14 +58,13 @@ MediapipeDemo/
 │
 ├── README.md
 ├── requirements.txt
-├── AGENTS.md
 ├── .gitignore
 │
 ├── assets/                         # 静态资源 / 模型文件
 │   └── face_landmarker.task
 │
 ├── outputs/                        # 运行生成结果
-│   └── fatigue_plot.png
+│   └── fatigue_plot.png            # 需要后续进行疲劳测试才会生成
 │
 ├── docs/                           # 需求文档、说明文档
 │   └── need.md
