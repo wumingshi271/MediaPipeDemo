@@ -1,7 +1,6 @@
 """
 procrustes_headpose.py — 公制头部姿态恢复（简化版）。
 
-简化策略（如 need.md 4.1 节允许）：
   1. 通过虹膜像素直径与已知虹膜真实直径(11.8mm)的比值，估算尺度因子。
   2. 将 MediaPipe 归一化 3D 坐标乘以尺度因子，得到公制网格(mm)。
   3. 旋转矩阵从 MediaPipe 的 facial_transformation_matrixes 提取；
@@ -13,8 +12,8 @@ procrustes_headpose.py — 公制头部姿态恢复（简化版）。
 
 import numpy as np
 
-import config
-from interfaces import FaceMeshResult, HeadPoseMetricEstimator, HeadPoseResult
+from .. import config
+from ..interfaces import FaceMeshResult, HeadPoseMetricEstimator, HeadPoseResult
 
 
 class SimplifiedHeadPoseEstimator(HeadPoseMetricEstimator):

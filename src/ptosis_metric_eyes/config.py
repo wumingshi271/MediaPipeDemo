@@ -7,13 +7,16 @@ config.py — 集中管理所有可调参数。
 
 import os
 
+PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(PACKAGE_DIR, "..", ".."))
+
 # ======================== 输入源 ========================
 # 摄像头编号（0 = 默认摄像头），也可改为视频文件路径，如 "video.mp4"
 VIDEO_SOURCE = 0
 
 # ======================== MediaPipe FaceLandmarker 参数 ========================
 FACEMESH_MODEL_PATH = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "face_landmarker.task"
+    PROJECT_ROOT, "assets", "face_landmarker.task"
 )
 FACEMESH_MAX_NUM_FACES = 1
 FACEMESH_MIN_DETECTION_CONFIDENCE = 0.5
@@ -23,9 +26,9 @@ FACEMESH_MIN_TRACKING_CONFIDENCE = 0.5
 # ======================== 关键点索引 (MediaPipe FaceMesh 478 点) ========================
 # 眼睑关键点——用于 PFH 计算
 LEFT_EYE_UPPER = 159    # 左眼上睑中央
-LEFT_EYE_LOWER = 23     # 左眼下睑中央（need.md 指定）
+LEFT_EYE_LOWER = 23     # 左眼下睑中央
 RIGHT_EYE_UPPER = 386   # 右眼上睑中央
-RIGHT_EYE_LOWER = 253   # 右眼下睑中央（need.md 指定）
+RIGHT_EYE_LOWER = 253   # 右眼下睑中央
 
 # 内眼角——用于 IPD 计算
 LEFT_INNER_CORNER = 133
@@ -68,7 +71,7 @@ CALIBRATION_POINT_COLOR = (0, 0, 255)  # BGR 红色
 
 # ======================== 疲劳测试参数 ========================
 FATIGUE_TEST_DURATION_SEC = 30   # 疲劳测试时长（秒）
-FATIGUE_PLOT_PATH = "fatigue_plot.png"
+FATIGUE_PLOT_PATH = os.path.join(PROJECT_ROOT, "outputs", "fatigue_plot.png")
 
 # ======================== 肌力测试参数（Berke 法） ========================
 LEFT_UPPER_LID_MARGIN = 159    # 左眼上睑缘关键点索引

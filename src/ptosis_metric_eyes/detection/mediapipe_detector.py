@@ -12,8 +12,8 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-import config
-from interfaces import FaceDetector, FaceMeshResult
+from .. import config
+from ..interfaces import FaceDetector, FaceMeshResult
 
 
 class MediaPipeFaceDetector(FaceDetector):

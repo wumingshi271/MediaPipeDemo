@@ -14,8 +14,8 @@ from typing import Optional
 
 import numpy as np
 
-import config
-from interfaces import HeadPoseResult, MuscleStrengthTester
+from .. import config
+from ..interfaces import HeadPoseResult, MuscleStrengthTester
 
 
 class TestState(Enum):

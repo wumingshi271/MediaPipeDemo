@@ -14,8 +14,8 @@ from typing import Optional, Tuple
 
 import numpy as np
 
-import config
-from interfaces import EyeTracker, FaceMeshResult, GazeResult, HeadPoseResult
+from .. import config
+from ..interfaces import EyeTracker, FaceMeshResult, GazeResult, HeadPoseResult
 
 
 class SphericalEyeTracker(EyeTracker):

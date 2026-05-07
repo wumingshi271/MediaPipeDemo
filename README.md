@@ -16,20 +16,21 @@
 pip install -r requirements.txt
 ```
 
-需要模型文件 `face_landmarker.task`（已包含在项目中）。如需重新下载：
+需要模型文件 `assets/face_landmarker.task`（已包含在项目中）。如需重新下载：
 
 ```bash
-curl -L -o face_landmarker.task https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
+curl -L -o assets/face_landmarker.task https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
 ```
 
 ## 运行
 
-```bash
+```powershell
 # 使用默认摄像头
-python main.py
+$env:PYTHONPATH = "src"
+python -m ptosis_metric_eyes.main
 
 # 使用视频文件
-python main.py video.mp4
+python -m ptosis_metric_eyes.main video.mp4
 ```
 
 ## 操作
@@ -55,32 +56,63 @@ python main.py video.mp4
 ```
 MediapipeDemo/
 │
-├── main.py                   # 主程序入口（视频循环、键盘交互、模式调度）
-├── interfaces.py             # 抽象基类与数据类（FaceDetector、HeadPoseMetricEstimator 等）
-├── config.py                 # 集中管理所有可调参数（关键点索引、阈值、颜色等）
+├── README.md
+├── requirements.txt
+├── AGENTS.md
+├── .gitignore
 │
-├── mediapipe_detector.py     # FaceDetector 实现：MediaPipe FaceLandmarker（478 点含虹膜）
-├── procrustes_headpose.py    # HeadPoseMetricEstimator 实现：虹膜尺度先验，输出 mm 级网格
-├── spherical_eye_tracker.py  # EyeTracker 实现：球形眼球模型，输出 yaw/pitch (deg)
-├── geometric_ptosis.py       # PtosisMetricCalculator 实现：3D 欧氏距离计算 PFH/IPD (mm)
-├── simple_personalizer.py    # Personalizer 实现：9 点校准 + scipy 最小二乘优化
-├── berke_muscle_tester.py    # MuscleStrengthTester 实现：Berke 法肌力测量 + 状态机
+├── assets/                         # 静态资源 / 模型文件
+│   └── face_landmarker.task
 │
-├── face_landmarker.task      # MediaPipe FaceLandmarker 模型文件
-├── requirements.txt          # Python 依赖列表
-└── README.md                 # 本文档
+├── outputs/                        # 运行生成结果
+│   └── fatigue_plot.png
+│
+├── docs/                           # 需求文档、说明文档
+│   └── need.md
+│
+└── src/
+    └── ptosis_metric_eyes/
+        ├── __init__.py
+        ├── main.py                 # 主程序入口（视频循环、键盘交互、模式调度）
+        ├── config.py               # 集中管理所有可调参数
+        ├── interfaces.py           # 抽象基类与数据类
+        │
+        ├── detection/
+        │   ├── __init__.py
+        │   └── mediapipe_detector.py
+        ├── pose/
+        │   ├── __init__.py
+        │   └── procrustes_headpose.py
+        ├── gaze/
+        │   ├── __init__.py
+        │   └── spherical_eye_tracker.py
+        ├── metrics/
+        │   ├── __init__.py
+        │   └── geometric_ptosis.py
+        ├── calibration/
+        │   ├── __init__.py
+        │   └── simple_personalizer.py
+        ├── tests/
+        │   ├── __init__.py
+        │   ├── fatigue_test.py
+        │   └── berke_muscle_tester.py
+        └── ui/
+            ├── __init__.py
+            └── drawing.py
 ```
 
 ### 模块依赖关系
 
 ```
-main.py
-  ├── mediapipe_detector.py  →  interfaces.FaceDetector
-  ├── procrustes_headpose.py →  interfaces.HeadPoseMetricEstimator
-  ├── spherical_eye_tracker.py → interfaces.EyeTracker
-  ├── geometric_ptosis.py    →  interfaces.PtosisMetricCalculator
-  ├── simple_personalizer.py →  interfaces.Personalizer
-  └── berke_muscle_tester.py →  interfaces.MuscleStrengthTester
+src/ptosis_metric_eyes/main.py
+  ├── detection/mediapipe_detector.py     -> interfaces.FaceDetector
+  ├── pose/procrustes_headpose.py         -> interfaces.HeadPoseMetricEstimator
+  ├── gaze/spherical_eye_tracker.py       -> interfaces.EyeTracker
+  ├── metrics/geometric_ptosis.py         -> interfaces.PtosisMetricCalculator
+  ├── calibration/simple_personalizer.py  -> interfaces.Personalizer
+  ├── tests/fatigue_test.py               -> 疲劳测试流程
+  ├── tests/berke_muscle_tester.py        -> interfaces.MuscleStrengthTester
+  └── ui/drawing.py                       -> OpenCV 绘制逻辑
           ↑
      所有模块均读取 config.py 中的配置参数
 ```

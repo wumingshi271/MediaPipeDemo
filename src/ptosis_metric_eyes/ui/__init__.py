@@ -1,0 +1,2 @@
+"""OpenCV drawing helpers."""
+

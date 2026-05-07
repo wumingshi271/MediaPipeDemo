@@ -15,8 +15,8 @@ from typing import Dict, List
 
 import numpy as np
 
-import config
-from interfaces import Personalizer
+from .. import config
+from ..interfaces import Personalizer
 
 
 class SimplePersonalizer(Personalizer):

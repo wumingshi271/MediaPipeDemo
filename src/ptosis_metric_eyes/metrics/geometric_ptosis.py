@@ -7,8 +7,8 @@ geometric_ptosis.py — 基于公制面部网格的 PFH 和 IPD 几何计算。
 
 import numpy as np
 
-import config
-from interfaces import HeadPoseResult, PtosisMetricCalculator, PtosisMetrics
+from .. import config
+from ..interfaces import HeadPoseResult, PtosisMetricCalculator, PtosisMetrics
 
 
 class GeometricPtosisCalculator(PtosisMetricCalculator):
